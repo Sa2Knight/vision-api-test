@@ -13,25 +13,24 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    @landmarks = flash[:landmarks]
-    @err       = flash[:error]
     erb :index
   end
 
   post '/' do
     # ファイルの存在を確認し、無ければエラーを戻す
     if ! params[:file] || params[:file].empty?
-      flash[:error] = 'ファイルを選択してください'
-      redirect '/'
+      @err = 'ファイルを選択してください'
+      return erb :index
     end
     # パラメータをクライアントクラスに投げ、実行結果を戻す
     client = Client.new(params)
     if landmarks = client.landmark_detection
-      flash[:landmarks] = landmarks
+      @landmarks = landmarks
+      @filepath = client.save
     else
-      flash[:error] = 'ランドマークが見つかりませんでした'
+      @err = 'ランドマークが見つかりませんでした'
     end
-    redirect '/'
+    erb :index
   end
 
 end
