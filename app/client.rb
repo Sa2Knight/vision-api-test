@@ -9,17 +9,34 @@ class Client
 
   def initialize(params)
     @params  = params
+    @file    = params['file']['tempfile'].read
   end
 
   def get_result
-    to_base64(@params['file'])
+    landmark_detection
+  end
+
+  def landmark_detection
+    params = create_params('LANDMARK_DETECTION')
+    post(params)
   end
 
   private
 
-  def to_base64(file)
-    binary = file['tempfile'].read
-    Base64.encode64(binary)
+  def create_params(type)
+    {
+      :requests => [
+        {
+          :image => {
+            :content => Base64.strict_encode64(@file),
+          },
+          :features => [
+            :type => type,
+            :maxResults => 1,
+          ]
+        },
+      ],
+    }
   end
 
   def post(params = {})
