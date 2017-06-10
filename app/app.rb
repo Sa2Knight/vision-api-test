@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'sinatra/reloader'
 require_relative './client'
 
 class App < Sinatra::Base
@@ -16,7 +17,7 @@ class App < Sinatra::Base
 
   post '/' do
     # ファイルの存在を確認し、無ければエラーを戻す
-    if ! params[:image] || params[:image].empty?
+    if ! params[:file] || params[:file].empty?
       redirect '/'
     end
     # パラメータをクライアントクラスに投げ、実行結果を戻す

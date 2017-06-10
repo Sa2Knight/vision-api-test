@@ -1,4 +1,5 @@
 require 'net/http'
+require 'base64'
 require 'json'
 
 class Client
@@ -11,10 +12,16 @@ class Client
   end
 
   def get_result
-    post()
+    to_base64(@params['file'])
   end
 
   private
+
+  def to_base64(file)
+    binary = file['tempfile'].read
+    Base64.encode64(binary)
+  end
+
   def post(params = {})
     uri  = URI.parse(@@API_URL)
     http = Net::HTTP.new(uri.host, uri.port)
