@@ -4,6 +4,8 @@ GEM
     kgio (2.11.0)
     mustermann (1.0.0)
     rack (2.0.3)
+    rack-flash3 (1.0.5)
+      rack
     rack-protection (2.0.0)
       rack
     raindrops (0.18.0)
@@ -21,6 +23,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rack-flash3
   sinatra
   unicorn
 

@@ -12,13 +12,11 @@ class Client
     @file    = params['file']['tempfile'].read
   end
 
-  def get_result
-    landmark_detection
-  end
-
   def landmark_detection
     params = create_params('LANDMARK_DETECTION')
-    post(params)
+    result = post(params)
+    result['responses'][0].empty? and return false
+    return result['responses'][0]['landmarkAnnotations'][0]
   end
 
   private
@@ -47,7 +45,7 @@ class Client
     req["Content-Type"] = "application/json"
     req.body = JSON.generate(params)
     res = http.request(req)
-    res.body
+    JSON.parse(res.body)
   end
 
 end

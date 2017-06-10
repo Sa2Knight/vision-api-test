@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require_relative './client'
+require 'rack/flash'
 
 class App < Sinatra::Base
 
@@ -8,20 +9,29 @@ class App < Sinatra::Base
 
   configure do
     enable :sessions
+    use Rack::Flash
   end
 
   get '/' do
+    @landmarks = flash[:landmarks]
+    @err       = flash[:error]
     erb :index
   end
 
   post '/' do
     # ファイルの存在を確認し、無ければエラーを戻す
     if ! params[:file] || params[:file].empty?
+      flash[:error] = 'ファイルを選択してください'
       redirect '/'
     end
     # パラメータをクライアントクラスに投げ、実行結果を戻す
     client = Client.new(params)
-    client.get_result
+    if landmarks = client.landmark_detection
+      flash[:landmarks] = landmarks
+    else
+      flash[:error] = 'ランドマークが見つかりませんでした'
+    end
+    redirect '/'
   end
 
 end
