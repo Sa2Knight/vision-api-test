@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require_relative './client'
 
 class App < Sinatra::Base
 
@@ -11,6 +12,16 @@ class App < Sinatra::Base
 
   get '/' do
     erb :index
+  end
+
+  post '/' do
+    # ファイルの存在を確認し、無ければエラーを戻す
+    if ! params[:image] || params[:image].empty?
+      redirect '/'
+    end
+    # パラメータをクライアントクラスに投げ、実行結果を戻す
+    client = Client.new(params)
+    client.get_result
   end
 
 end
