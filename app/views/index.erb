@@ -27,7 +27,27 @@
   <!-- 解析結果出力 -->
   <% if @landmarks %>
   <div class="result">
-    <%= @landmarks.to_json %>
+    <p>ランドマークを検出しました</p>
+    <table border="1">
+      <tbody>
+        <tr>
+          <th>名称</th>
+          <td><%= @landmarks['description'] %></td>
+        </tr>
+        <tr>
+          <th>信頼度</th>
+          <td><%= @landmarks['score'] %></td>
+        </tr>
+        <tr>
+          <th>緯度</th>
+          <td><%= @landmarks['locations'][0]['latLng']['latitude'] %></td>
+        </tr>
+        <tr>
+          <th>経度</th>
+          <td><%= @landmarks['locations'][0]['latLng']['longitude'] %></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <% end %>
 
