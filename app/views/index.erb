@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Google Cloud Vision APIで遊んでみた</title>
+  <script src="jquery-2.2.0.min.js"></script>
 </head>
 <body>
 
@@ -25,37 +26,34 @@
   <% end %>
 
   <!-- 解析結果出力 -->
-  <% if @landmarks %>
+  <% if @landmark %>
   <div class="result">
     <p>ランドマークを検出しました</p>
     <table border="1">
       <tbody>
         <tr>
           <th>名称</th>
-          <td><%= @landmarks['description'] %></td>
+          <td><%= @landmark['description'] %></td>
         </tr>
         <tr>
           <th>信頼度</th>
-          <td><%= @landmarks['score'] %></td>
+          <td><%= @landmark['score'] %></td>
         </tr>
         <tr>
           <th>緯度</th>
-          <td><%= @landmarks['locations'][0]['latLng']['latitude'] %></td>
+          <td><%= @landmark['locations'][0]['latLng']['latitude'] %></td>
         </tr>
         <tr>
           <th>経度</th>
-          <td><%= @landmarks['locations'][0]['latLng']['longitude'] %></td>
+          <td><%= @landmark['locations'][0]['latLng']['longitude'] %></td>
         </tr>
       </tbody>
     </table>
   </div>
   <% end %>
 
-  <% if @filepath %>
-  <div class="image">
-    <img src="<%= @filepath %>">
-  </div>
-  <% end %>
+  <!-- アップロード画像 -->
+  <canvas id="image"></canvas>
 
   <footer>
     <a href="https://github.com/Sa2Knight/vision-api-test">
@@ -63,4 +61,33 @@
     </a>
   </footer>
 </body>
+
+<!-- アップロードした画像を動的に表示 -->
+<script>
+  var ctx = document.querySelector("#image").getContext("2d");
+  var img = new Image();
+  img.src = "<%= @filepath %>";
+  img.onload = function() {
+    // 画像をフルサイズで描画
+    $("#image").attr('width', img.width).attr('height', img.height);
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    // ランドマーク情報に合わせてラインを描画
+    <% if @landmark %>
+    var x1 = <%= @landmark['boundingPoly']['vertices'][0]['x'] %>;
+    var x2 = <%= @landmark['boundingPoly']['vertices'][2]['x'] %>;
+    var y1 = <%= @landmark['boundingPoly']['vertices'][0]['y'] %>;
+    var y2 = <%= @landmark['boundingPoly']['vertices'][2]['y'] %>;
+    ctx.strokeStyle = '#F55';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y1);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x1, y2);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+    <% end %>
+  };
+</script>
+
 </html>

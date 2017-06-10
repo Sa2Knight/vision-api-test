@@ -24,12 +24,12 @@ class App < Sinatra::Base
     end
     # パラメータをクライアントクラスに投げ、実行結果を戻す
     client = Client.new(params)
-    if landmarks = client.landmark_detection
-      @landmarks = landmarks
-      @filepath = client.save
+    if landmark = client.landmark_detection
+      @landmark = landmark
     else
       @err = 'ランドマークが見つかりませんでした'
     end
+    @filepath = client.save
     erb :index
   end
 
