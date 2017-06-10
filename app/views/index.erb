@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <title>Google Cloud Vision APIで遊んでみた</title>
   <script src="jquery-2.2.0.min.js"></script>
+  <style href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.css"></style>
 </head>
 <body>
 
   <header>
-    <p>画像をアップロードするとGoogleCloudVisionAPIを用いて解析します</p>
-    <p>APIリミット 1000/1000</p>
+    <h1 class="title is-2">ランドマーク解析</h1>
+    <h2 class="subtitle is-3">
+      画像をアップロードするとGoogle Cloud Vision APIを用いて解析します
+    </h2>
   </header>
 
   <!-- アップロードフォーム -->
@@ -29,7 +32,7 @@
   <% if @landmark %>
   <div class="result">
     <p>ランドマークを検出しました</p>
-    <table border="1">
+    <table class="table is-bordered is-striped is-narrow">
       <tbody>
         <tr>
           <th>名称</th>
