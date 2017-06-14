@@ -1,6 +1,6 @@
 # coding: utf-8
 
-@path = '/root/vision_api'
+@path = '/root/vision-api-test'
 @path.chomp!
 worker_processes 1
 working_directory @path
